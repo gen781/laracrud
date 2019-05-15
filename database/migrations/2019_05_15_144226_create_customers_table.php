@@ -17,7 +17,7 @@ class CreateCustomersTable extends Migration
             $table->bigIncrements('id');
             $table->string('nama_customer');
             $table->string('alamat');
-            $table->timestamps('tgl_masuk');
+            $table->timestamp('tgl_masuk');
             $table->integer('limit');
             $table->string('no_ktp')->unique();
             $table->integer('operator');
