@@ -34,20 +34,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($customer as $p)
+                            @foreach($customers as $customer)
                             <tr>
-                                <td>{{ $p->nama_customer }}</td>
-                                <td>{{ $p->alamat }}</td>
-                                <td>{{ $p->tgl_masuk }}</td>
-                                <td>{{ $p->limit }}</td>
-                                <td>{{ $p->no_ktp }}</td>
-                                <td>{{ $p->operator }}</td>
-                                <td>{{ $p->no_rek }}</td>
+                                <td>{{ $customer->nama_customer }}</td>
+                                <td>{{ $customer->alamat }}</td>
+                                <td>{{ date('d-m-Y', strtotime($customer->tgl_masuk)) }}</td>
+                                <td>{{ $customer->limit }}</td>
+                                <td>{{ $customer->no_ktp }}</td>
+                                <td>{{ $customer->operator }}</td>
+                                <td>{{ $customer->no_rek }}</td>
                                 <td>
-                                    <a href="/edit/{{ $p->id }}" class="btn btn-warning btn-xs">
+                                    <a href="/edit/{{ $customer->id }}" class="btn btn-warning btn-xs">
                                         <i class="fa fa-edit"></i>
                                     </a>
-                                    <a href="/hapus/{{ $p->id }}" class="btn btn-danger btn-xs">
+                                    <a href="/hapus/{{ $customer->id }}" class="btn btn-danger btn-xs">
                                         <i class="fa fa-trash"></i>
                                     </a>
                                 </td>

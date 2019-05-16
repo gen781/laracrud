@@ -17,3 +17,4 @@
 
 Route::get('/', 'CustomerController@index');
 Route::get('/tambah', 'CustomerController@tambah');
+Route::get('/hapus/{id}', 'CustomerController@delete');
