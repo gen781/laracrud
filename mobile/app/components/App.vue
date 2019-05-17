@@ -1,57 +1,71 @@
 <template>
     <Page class="page">
-        <ActionBar title="CRUD Data Customer" class="action-bar" />
-        <ScrollView>
-            <StackLayout class="home-panel">
-                <ListView class="list-group" for="country in countries" @itemTap="onItemTap" style="height:1600px">
+        <ActionBar class="action-bar" title="CRUD Data Customer">          
+        </ActionBar>
+
+        <GridLayout>
+            <ListView for="p in pokemon" class="list-group">
                 <v-template>
-                    <FlexboxLayout flexDirection="row" class="list-group-item">
-                      <Label :text="country.nama_customer" class="list-group-item-heading" style="width: 60%" />
-                    </FlexboxLayout>
+                    <StackLayout class="list-group-item">
+                        <Label :text="p.nama_customer" />
+                    </StackLayout>
                 </v-template>
-                </ListView>
-            </StackLayout>
-        </ScrollView>
+            </ListView>
+            <fab
+              @tap="tambahCustomer"
+              row="1"
+              icon="res://ic_add_white"
+              rippleColor="#f1f1f1"
+              class="fab-button"
+            ></fab>
+        </GridLayout>
     </Page>
 </template>
 
 <script>
-import axios from 'axios';
+    import Vue from "nativescript-vue";
+    Vue.registerElement(
+      'Fab',
+      () => require('nativescript-floatingactionbutton').Fab
+    );
 
-export default {
-    methods: {
-        onItemTap: function(args) {
-            console.log('Item with index: ' + args.index + ' tapped');
+    import * as http from "http";
+    export default {
+        methods: {
+            onButtonTap() {
+                console.log("Button was pressed");
+            },
+            tambahCustomer() {
+                console.log("Button was pressed");
+            }
         },
-        showCustomer() {
-          axios.get('http//:localhost:8000/api/customer')
-          .then(response => {
-            this.countries=response.data.customers;
-          }).catch(err => {
-            console.log(err)
-          })
-        }
-    },
-    mounted() {
-      this.showCustomer;
-    },
 
-    data() {
-        return {
-          countries: [],
-        };
-    },
-}
+        data() {
+            return {
+                pokemon: []
+            };
+        },
+        mounted() {
+            http.getJSON(
+                "https://laracrudbasic.000webhostapp.com/api/customer"
+            ).then(
+                result => {
+                    this.pokemon = result.customers;
+                },
+                error => {
+                    console.log(error);
+                }
+            );
+        }
+    };
 </script>
 
 <style scoped>
-.home-panel {
-    vertical-align: center;
-    font-size: 20;
+  .fab-button {
+    height: 70;
     margin: 15;
-}
-
-.description-label {
-    margin-bottom: 15;
-}
+    background-color: #ff4081;
+    horizontal-align: right;
+    vertical-align: bottom;
+  }
 </style>
