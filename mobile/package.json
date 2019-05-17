@@ -18,7 +18,9 @@
     "nativescript-floatingactionbutton": "^5.0.3",
     "nativescript-material-floatingactionbutton": "^2.2.13",
     "nativescript-vue": "^2.0.0",
-    "tns-core-modules": "^5.0.2"
+    "nativescript-vue-fab": "^1.0.12",
+    "tns-core-modules": "^5.0.2",
+    "vue-clock-simple": "^1.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
