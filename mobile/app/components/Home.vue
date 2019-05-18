@@ -1,20 +1,23 @@
 <template>
   <Page class="page">
-    <ActionBar title="Data Customer" class="action-bar" />
+    <ActionBar title="Data Customer" class="action-bar" >
+    <NavigationButton icon="res://ic_arrow_back_white_24dp"
+                tap="goBack" />
 
-
+    </ActionBar>
         <!-- Positions an input field, a button, and the list of tasks in a vertical stack. -->
         <StackLayout orientation="vertical" width="100%" height="100%">
-
           <GridLayout columns="2*,*" rows="*" width="100%" height="25%">
-            <TextField col="0" row="0" v-model="textFieldValue" hint="Nama customer..." editable="true" @returnPress="onButtonTap" />
+            <!-- <TextField col="0" row="0" v-model="textFieldValue" hint="Nama customer..." editable="true" @returnPress="onButtonTap" /> -->
             <!-- Configures the text field and ensures that pressing Return on the keyboard produces the same result as tapping the button. -->
-            <Button col="1" row="0" text="+ Tambah" @tap="onButtonTap" />
+            <Button col="1" row="0" text="+ Tambah" @tap="$goto('tambah', navOptions)" />
           </GridLayout>
-
-          <ListView class="list-group" for="customer in customers" @itemTap="onItemTap" style="height:100%" separatorColor="transparent">
+          <ListView class="list-group" for="customer in customers" @itemTap="$goto('detail', navOptions)" style="height:100%" separatorColor="transparent">
             <v-template>
+              <StackLayout orientation="vertical" width="100%" height="100%">
               <Label id="active-task" :text="customer.nama_customer" class="list-group-item-heading" />
+              <Label id="active-task-bottom" :text="customer.no_ktp" class="list-group-item-heading" />
+              </StackLayout>
             </v-template>
           </ListView>
         </StackLayout>
@@ -26,17 +29,33 @@
 import * as http from "http";
 var dialogs = require("tns-core-modules/ui/dialogs");
 export default {
+  computed: {
+    navOptions() {
+      return {
+          clearHistory: true,
+          backstackVisible: true,
+          transition: {
+              name: "fade",
+              duration: 380,
+              curve: "easeIn"
+          },
+          props: {
+            customerData: '',
+          }
+      }
+    }
+  },
   mounted(){
     http.getJSON(
-                "https://laracrudbasic.000webhostapp.com/api/customer"
-            ).then(
-                result => {
-                    this.customers = result.customers;
-                },
-                error => {
-                    console.log(error);
-                }
-            );
+        "https://laracrudbasic.000webhostapp.com/api/customer"
+    ).then(
+        result => {
+            this.customers = result.customers;
+        },
+        error => {
+            console.log(error);
+        }
+    );
   },
   methods: {
     onItemTap: function(args) {
@@ -55,6 +74,16 @@ export default {
             break; 
         }
       })
+    },
+
+    detailCustomer: function(args) {
+      dialogs.alert({
+          title: "Data "+args.item.nama_customer,
+          message: "Alamat: "+args.item.alamat,
+          okButtonText: "OK"
+      }).then(function () {
+          console.log("Dialog closed!");
+      });
     },
 
    onDoneTap: function(args) { 
@@ -143,6 +172,12 @@ Button {
   color: #53ba82;
   margin-left: 20;
   padding-top: 5;
+}
+
+#active-task-bottom {
+  font-size: 15;
+  color: #4E504D;
+  margin-left: 20;
   padding-bottom: 10;
 }
 </style>
