@@ -2,134 +2,150 @@
   <Page class="page">
     <ActionBar title="Tambah Customer" class="action-bar" >
       <NavigationButton  android.systemIcon="ic_menu_back" @tap="$goto('home', navOptions)" />
-      <ActionItem tap="onShare"
-      ios.systemIcon="9" ios.position="left"
-      android.systemIcon="ic_input_add" android.position="actionBar"></ActionItem>
+      <ActionItem @tap="tambahCustomer"
+        ios.systemIcon="9" ios.position="left"
+        text="SUBMIT"
+        android.position="actionBar"
+      >
+      </ActionItem>
     </ActionBar>
-        <!-- Positions an input field, a button, and the list of tasks in a vertical stack. -->
-        <StackLayout orientation="vertical" width="100%" height="100%">
-
-            <TextField  v-model="textFieldValue" hint="Nama Customer..." editable="true" @returnPress="onButtonTap" />
-            <TextField  v-model="textFieldValue" hint="Alamat..." editable="true" @returnPress="onButtonTap" />
-            <TextField  v-model="textFieldValue" hint="Tgl. Masuk..." editable="true" @returnPress="onButtonTap" />
-            <TextField  v-model="textFieldValue" hint="Limit..." editable="true" @returnPress="onButtonTap" />
-            <TextField  v-model="textFieldValue" hint="No. KTP..." editable="true" @returnPress="onButtonTap" />
-            <TextField  v-model="textFieldValue" hint="Operator..." editable="true" @returnPress="onButtonTap" />
-            <TextField  v-model="textFieldValue" hint="No. Rekening..." editable="true" @returnPress="onButtonTap" />
-
-
-        </StackLayout>
-
+    <StackLayout orientation="vertical" width="100%" height="100%">
+      <ScrollView>
+        <RadDataForm  ref="dataForm" :source="customer" :metadata="md" :groups="groups">
+        </RadDataForm>
+      </ScrollView>
+    </StackLayout>
   </Page>
 </template>
 
 <script>
+import 'nativescript-ui-dataform/vue';
 import * as http from "http";
+import axios from "axios";
+require("nativescript-vue").registerElement(
+    "RadDataForm",
+    () => require("nativescript-ui-dataform").RadDataForm
+);
 var dialogs = require("tns-core-modules/ui/dialogs");
 export default {
   props: {
-    customerData: ''
+  },
+  data() {
+    return {
+      customer: {
+        nama_customer: '',
+        alamat: '',
+        tgl_masuk: '',
+        limit: null,
+        no_ktp: '',
+        operator: null,
+        no_rek: ''
+      },
+      md: {
+        "isReadOnly": false,
+        "commitMode": "Immediate",
+        "validationMode": "Immediate",
+        "propertyAnnotations":
+        [
+            {
+                "name": "nama_customer",
+                "displayName": "Nama",
+                "index": 0,
+                "Editor": "Text",
+                "validators": [
+                  { "name": "NonEmpty" }
+                ]
+            },
+            {
+                "name": "alamat",
+                "displayName": "Alamat",
+                "index": 1,
+                "Editor": "Text"
+            },
+            {
+                "name": "tgl_masuk",
+                "displayName": "Tgl. Masuk",
+                "index": 2,
+                "Editor": "DatePicker"
+            },
+            {
+                "name": "limit",
+                "displayName": "Limit",
+                "index": 3,
+                "Editor": "Number"
+            },
+            {
+                "name": "no_ktp",
+                "displayName": "No. KTP",
+                "index": 4,
+                "Editor": "Text"
+            },
+            {
+                "name": "operator",
+                "displayName": "Operator",
+                "index": 5,
+                "Editor": "Number"
+            },
+                {
+                "name": "no_rek",
+                "displayName": "No. Rekening",
+                "index": 6,
+                "Editor": "Text"
+            },
+        ]
+      }
+    };
   },
   computed: {
     navOptions() {
       return {
-          clearHistory: true,
-          backstackVisible: true,
-          transition: {
-              name: "fade",
-              duration: 380,
-              curve: "easeIn"
-          },
-          props: {
-            customerData: '',
-          }
+        clearHistory: true,
+        backstackVisible: true,
+        transition: {
+          name: "fade",
+          duration: 380,
+          curve: "easeIn"
+        }
       }
-    }
+    },
   },
   mounted(){
-    http.getJSON(
-        "https://laracrudbasic.000webhostapp.com/api/customer"
-    ).then(
-        result => {
-            this.customers = result.customers;
-        },
-        error => {
-            console.log(error);
-        }
-    );
   },
   methods: {
-    onItemTap: function(args) {
-     action('What do you want to do with this task?', 'Cancel', ['Mark completed', 'Delete forever']) 
-      .then(result => { 
-        console.log(result); // Logs the selected option for debugging.
-        switch (result) {
-          case 'Mark completed': 
-            this.dones.unshift(args.item); // Places the tapped active task at the top of the completed tasks.
-            this.todos.splice(args.index, 1); // Removes the tapped active  task.
-            break;
-          case 'Delete forever':
-            this.todos.splice(args.index, 1); // Removes the tapped active task.
-            break; 
-          case 'Cancel' || undefined: // Dismisses the dialog
-            break; 
+    tambahCustomer() {
+      // dialogs.alert(this.customer.tgl_masuk+" & "+this.customer.nama_customer+" & "+this.customer.alamat+" & "+this.customer.no_ktp+" & "+this.customer.operator+" & "+this.customer.no_rek+" & "+this.customer.limit).then(function() {
+      //   console.log("Dialog closed!");
+      // });
+      axios.post('https://laracrudbasic.000webhostapp.com/api/customer', this.customer,
+        {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         }
-      })
-    },
-
-    detailCustomer: function(args) {
-      dialogs.alert({
-          title: "Data "+args.item.nama_customer,
-          message: "Alamat: "+args.item.alamat,
-          okButtonText: "OK"
-      }).then(function () {
+      )
+      .then(response => {
+        dialogs.alert(response.data.nama_customer).then(function() {
           console.log("Dialog closed!");
+        });
+        // this.$goto('home', this.navOptions);
+      }).catch(error => {
+        dialogs.alert(error).then(function() {
+          console.log("Dialog closed!");
+        });
       });
-    },
 
-   onDoneTap: function(args) { 
-    action('What do you want to do with this task?', 'Cancel', ['Mark to do', 'Delete forever'])
-      .then(result => { 
-        console.log(result); // Logs the selected option for debugging. 
-        switch (result) { 
-          case 'Mark to do':
-            this.todos.unshift(args.item); // Places the tapped completed task at the top of the to do tasks. 
-            this.dones.splice(args.index,1); // Removes the tapped completed task. 
-            break; 
-          case 'Delete forever': 
-            this.dones.splice(args.index, 1); // Removes the tapped completed task. 
-            break; 
-          case 'Cancel' || undefined: // Dismisses the dialog 
-            break; 
-        } 
-      }) 
-    },
-
-    onButtonTap() {
-      dialogs.prompt({
-        title: "Form Input",
-        message: "Tambah Customer",
-        okButtonText: "Kirim",
-        cancelButtonText: "Batal",
-        inputType: dialogs.inputType.text
-      }).then(function (r) {
-          console.log("Dialog result: " + r.result + ", text: " + r.text);
-      });
-      // console.log("New task added: " + this.textFieldValue + "."); // Logs the newly added task in the console for debugging.
-      // this.todos.unshift({
-      //   name: this.textFieldValue
-      // }); // Adds tasks in the ToDo array. Newly added tasks are immediately shown on the screen.
-      // this.textFieldValue = ""; // Clears the text field so that users can start adding new tasks immediately.
-    },
-  },
-
-  data() {
-    return {
-      dones: [],
-      todos: [],
-      textFieldValue: "",
-      customers: []
-    };
+      // http.request({
+      //   url: "https://laracrudbasic.000webhostapp.com/api/customer",
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   content: JSON.stringify(this.customer)
+      // }).then((response) => {
+      //   this.$goto('home', this.navOptions);
+      // }, (error) => {
+      //   console.log(error);
+      //   dialogs.alert(error).then(function() {
+      //     console.log("Dialog closed!");
+      //   });
+      // });
+    }
   },
 }
 </script>
@@ -152,6 +168,15 @@ TextField {
   margin-bottom: 5;
   margin-right: 20;
   margin-left: 20;
+}
+
+ActionBar {
+  background-color:  #53ba82;
+  color: white;
+}
+
+ActionItem {
+  background-color: white;
 }
 
 Button { 
