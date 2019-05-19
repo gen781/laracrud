@@ -4,7 +4,7 @@
       <NavigationButton  icon="res://baseline_arrow_back_ios_white_24" @tap="$goto('home', navOptions)" />
       <ActionItem @tap="tambahCustomer"
         ios.systemIcon="9" ios.position="left"
-        text="SUBMIT"
+        icon="res://baseline_send_white_24"
         android.position="actionBar"
       >
       </ActionItem>

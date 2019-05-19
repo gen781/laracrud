@@ -2,9 +2,9 @@
   <Page class="page">
     <ActionBar :title="'Detail '+customerData.nama_customer" class="action-bar" >
       <NavigationButton  icon="res://baseline_arrow_back_ios_white_24" @tap="$goto('home', navOptions)" />
-      <ActionItem tap="onShare"
+      <ActionItem @tap="hapusCustomer"
         ios.systemIcon="9" ios.position="left"
-        text="HAPUS"
+        icon="res://baseline_delete_forever_white_24"
         android.position="actionBar"
       >
       </ActionItem>
@@ -20,6 +20,7 @@
 
 <script>
 import * as http from "http";
+import axios from "axios";
 var dialogs = require("tns-core-modules/ui/dialogs");
 export default {
   props: {
@@ -100,9 +101,22 @@ export default {
     }
   },
   mounted(){
+
   },
   methods: {
-
+    hapusCustomer() {
+      axios.delete('https://laracrudbasic.000webhostapp.com/api/customer/'+this.customerData.id).then(response => {
+        dialogs.alert({
+          title: "Info",
+          message: "Data "+this.customerData.nama_customer+" berhasil dihapus!",
+          okButtonText: "OK"
+        }).then(function () {
+          this.$goto('home', this.navOptions);
+        });
+      }).catch(err => {
+        console.log(err)
+      })
+    }
   },
 
 }
