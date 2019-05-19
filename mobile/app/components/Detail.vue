@@ -1,7 +1,7 @@
 <template>
   <Page class="page">
     <ActionBar :title="'Detail '+customerData.nama_customer" class="action-bar" >
-      <NavigationButton  android.systemIcon="ic_menu_back" @tap="$goto('home', navOptions)" />
+      <NavigationButton  icon="res://baseline_arrow_back_ios_white_36" @tap="$goto('home', navOptions)" />
       <ActionItem tap="onShare"
         ios.systemIcon="9" ios.position="left"
         text="HAPUS"

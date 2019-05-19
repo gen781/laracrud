@@ -1,25 +1,33 @@
 <template>
   <Page class="page">
     <ActionBar title="Data Customer" class="action-bar" ></ActionBar>
-    <StackLayout orientation="vertical" width="100%" height="100%">
-      <GridLayout columns="2*,*" rows="*" width="100%" height="25%">
-        <Button col="1" row="0" text="+ Tambah" @tap="$goto('tambah', navOptions)" />
+      <GridLayout rows="auto,*">
+        <ListView row="1" class="list-group" for="customer in customers" @itemTap="gotoEditPage" style="height:100%" separatorColor="transparent">
+          <v-template>
+            <StackLayout orientation="vertical" width="100%" height="100%">
+            <Label id="active-task" :text="customer.nama_customer" class="list-group-item-heading" />
+            <Label id="active-task-bottom" :text="customer.no_ktp" class="list-group-item-heading" />
+            </StackLayout>
+          </v-template>
+        </ListView>
+        <fab
+          @tap="$goto('tambah', navOptions)"
+          row="1"
+          icon="res://baseline_add_white_48"
+          rippleColor="#f1f1f1"
+          class="fab-button"
+        ></fab>
       </GridLayout>
-      <ListView class="list-group" for="customer in customers" @itemTap="gotoEditPage" style="height:100%" separatorColor="transparent">
-        <v-template>
-          <StackLayout orientation="vertical" width="100%" height="100%">
-          <Label id="active-task" :text="customer.nama_customer" class="list-group-item-heading" />
-          <Label id="active-task-bottom" :text="customer.no_ktp" class="list-group-item-heading" />
-          </StackLayout>
-        </v-template>
-      </ListView>
-    </StackLayout>
   </Page>
 </template>
 
 <script>
 import * as http from "http";
 var dialogs = require("tns-core-modules/ui/dialogs");
+require("nativescript-vue").registerElement(
+  'Fab',
+  () => require('nativescript-floatingactionbutton').Fab
+);
 export default {
   computed: {
     navOptions() {
@@ -65,6 +73,14 @@ export default {
 </script>
 
 <style scoped>
+.fab-button {
+  height: 70;
+  margin: 15;
+  background-color: #53ba82;
+  horizontal-align: right;
+  vertical-align: bottom;
+}
+
 .home-panel {
   vertical-align: center;
   font-size: 20;

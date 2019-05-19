@@ -1,7 +1,7 @@
 <template>
   <Page class="page">
     <ActionBar title="Tambah Customer" class="action-bar" >
-      <NavigationButton  android.systemIcon="ic_menu_back" @tap="$goto('home', navOptions)" />
+      <NavigationButton  icon="res://baseline_arrow_back_ios_white_36" @tap="$goto('home', navOptions)" />
       <ActionItem @tap="tambahCustomer"
         ios.systemIcon="9" ios.position="left"
         text="SUBMIT"
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import 'nativescript-ui-dataform/vue';
+import 'nativescript-ui-dataform';
 import * as http from "http";
 import axios from "axios";
 require("nativescript-vue").registerElement(

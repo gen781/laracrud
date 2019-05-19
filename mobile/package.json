@@ -10,16 +10,17 @@
       "version": "5.0.0"
     },
     "tns-android": {
-      "version": "5.0.0"
+      "version": "5.4.0"
     }
   },
   "dependencies": {
     "axios": "^0.18.0",
     "nativescript-floatingactionbutton": "^5.0.3",
     "nativescript-material-floatingactionbutton": "^2.2.13",
+    "nativescript-ui-dataform": "^4.0.0",
     "nativescript-vue": "^2.0.0",
     "nativescript-vue-fab": "^1.0.12",
-    "tns-core-modules": "^5.0.2",
+    "tns-core-modules": "^5.4.0",
     "vue-clock-simple": "^1.0.4"
   },
   "devDependencies": {
