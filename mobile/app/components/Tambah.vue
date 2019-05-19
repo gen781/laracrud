@@ -1,7 +1,7 @@
 <template>
   <Page class="page">
     <ActionBar title="Tambah Customer" class="action-bar" >
-      <NavigationButton  icon="res://baseline_arrow_back_ios_white_36" @tap="$goto('home', navOptions)" />
+      <NavigationButton  icon="res://baseline_arrow_back_ios_white_24" @tap="$goto('home', navOptions)" />
       <ActionItem @tap="tambahCustomer"
         ios.systemIcon="9" ios.position="left"
         text="SUBMIT"

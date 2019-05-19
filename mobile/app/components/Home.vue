@@ -13,7 +13,7 @@
         <fab
           @tap="$goto('tambah', navOptions)"
           row="1"
-          icon="res://baseline_add_white_48"
+          icon="res://baseline_add_white_36"
           rippleColor="#f1f1f1"
           class="fab-button"
         ></fab>
