@@ -24,9 +24,13 @@ Run the server:
 ```bash
 php artisan serve
 ```
+Open the browser & type to the url address bar:
+```url
+http://localhost:8000
+```
 
 ### Mobile Application
-Enter to web directory :
+Enter to mobile directory :
 ```bash
 cd laracrud/mobile
 ```
@@ -39,12 +43,6 @@ Preview apps via Nativescript Playground:
 tns preview
 ```
 Then scan the barcode through your Nativescript Playground. If you don't have, please download it first on Playstore.
-
-## Instruction
-Open the browser & type to the url address bar:
-```url
-http://localhost:8000
-```
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
