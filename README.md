@@ -1,16 +1,18 @@
 # laracrud
-Basic CRUD application based on laravel
+Basic CRUD application based on laravel for web service & Nativescript-vue for mobile application
 
 ## Install
 Clone repository :
 ```bash
 git clone https://github.com/gen781/laracrud.git
 ```
+
+### Web Service
 Enter to web directory :
 ```bash
 cd laracrud/web
 ```
-User composer for installation:
+Use composer for installation:
 ```bash
 composer install
 ```
@@ -22,6 +24,21 @@ Run the server:
 ```bash
 php artisan serve
 ```
+
+### Mobile Application
+Enter to web directory :
+```bash
+cd laracrud/mobile
+```
+Use npm for installation:
+```bash
+npm install
+```
+Preview apps via Nativescript Playground:
+```bash
+tns preview
+```
+Then scan the barcode through your Nativescript Playground. If you don't have, please download it first on Playstore.
 
 ## Instruction
 Open the browser & type to the url address bar:
