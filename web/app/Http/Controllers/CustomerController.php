@@ -78,7 +78,7 @@ class CustomerController extends Controller
 
     public function apiDestroy($id)
     {
-        $customer = Customer::findOrFail($id);
+        $customer = Customer::find($id);
 
         if($customer->delete()){
             $response = [

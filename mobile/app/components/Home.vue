@@ -1,7 +1,7 @@
 <template>
     <Page class="page">
         <ActionBar title="Data Customer" class="action-bar"></ActionBar>
-        <StackLayout>
+        <StackLayout orientation="vertical" width="100%" height="100%">
           <AbsoluteLayout v-if="tampil_circle==true" class="cv">
             <Label class="cv-lbl" />
             <Label class="inner-circle" />
@@ -49,7 +49,9 @@
               curve: "easeIn"
             },
             props: {
-              customerData: this.customerEditData
+              customerData: this.customerEditData,
+              tampilCircle: false,
+              tampilData: true
             }
           };
         }
