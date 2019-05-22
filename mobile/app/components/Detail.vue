@@ -14,10 +14,13 @@
         <Label class="cv-lbl" />
         <Label class="inner-circle" />
       </AbsoluteLayout>
-      <ScrollView>
-        <RadDataForm v-if="tampilData==true" ref="dataForm" :source="customerMap" :metadata="md" :groups="groups">
-        </RadDataForm>
-      </ScrollView>
+      <GridLayout rows="auto,*">
+        <ScrollView row="1">
+          <RadDataForm v-if="tampilData==true" ref="dataForm" :source="customerMap" :metadata="md" :groups="groups">
+          </RadDataForm>
+        </ScrollView>
+        <Button row="2" text="Simpan" @tap="simpanCustomer" />
+      </GridLayout>
     </StackLayout>
   </Page>
 </template>
