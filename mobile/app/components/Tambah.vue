@@ -126,40 +126,58 @@ export default {
   },
   methods: {
     onPropertyCommitted (data) {
-      this.customerCommitted = data.object.editedObject.toJSON();
-      console.log(this.customerCommitted)
+      this.customerCommitted = data.object.editedObject;
+      console.log(this.customerCommitted);
     },
     tambahCustomer() {
-      this.tampilCircle = true;
-      this.tampilData = false;
-      console.log(this.customerCommitted)
-      http.request({
-        url: "https://laracrudbasic.000webhostapp.com/api/customer",
-        method: "POST",
-        headers: { 
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json" 
-        },
-        content: JSON.stringify(this.customerCommitted)
-      }).then((response) => {
-        this.tampilCircle = false;
-        dialogs.confirm({
-          title: "Info",
-          message: "Data "+this.customerCommitted.nama_customer+" berhasil ditambahkan!",
+      if(Object.keys(this.customerCommitted).length === 0) {
+        dialogs.alert({
+          title: "Perhatian",
+          message: "Sebagian data masih kosong, silahkan lengkapi data!",
           okButtonText: "OK"
-        }).then((result) => {
-          console.log(response.content.toJSON());
-          this.$goto('home', this.navOptions);
-        });
-      }, (error) => {
-        dialogs.confirm({
-          title: "Error",
-          message: error,
-          okButtonText: "OK"
-        }).then((result) => {
-          console.log(error);
-        });
-      });
+        })
+      } else {
+        let cstParse = JSON.parse(this.customerCommitted);
+        console.log(cstParse)
+        if(cstParse.nama_customer==''||cstParse.alamat==''||cstParse.tgl_masuk==''
+        ||cstParse.limit==''||cstParse.no_ktp==''||cstParse.operator==''||cstParse.no_rek=='') {
+          dialogs.alert({
+            title: "Perhatian",
+            message: "Sebagian data masih kosong, silahkan lengkapi data!",
+            okButtonText: "OK"
+          })
+        } else {
+          this.tampilCircle = true;
+          this.tampilData = false;
+          http.request({
+            url: "https://laracrudbasic.000webhostapp.com/api/customer",
+            method: "POST",
+            headers: { 
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": "application/json" 
+            },
+            content: this.customerCommitted
+          }).then((response) => {
+            this.tampilCircle = false;
+            dialogs.confirm({
+              title: "Info",
+              message: "Data "+cstParse.nama_customer+" berhasil ditambahkan!",
+              okButtonText: "OK"
+            }).then((result) => {
+              console.log(response.content.toJSON());
+              this.$goto('home', this.navOptions);
+            });
+          }, (error) => {
+            dialogs.confirm({
+              title: "Error",
+              message: error,
+              okButtonText: "OK"
+            }).then((result) => {
+              console.log(error);
+            });
+          });
+        }
+      }
     }
   },
 }
