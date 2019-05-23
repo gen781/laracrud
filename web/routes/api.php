@@ -21,6 +21,6 @@ Route::group(['middleware' => 'api',], function () {
     Route::get('customer', 'CustomerController@apiIndex')->name('customer.apiIndex');
     Route::post('customer', 'CustomerController@apiStore')->name('customer.apiStore');
     Route::get('customer/{id}', 'CustomerController@apiShow')->name('customer.apiShow');
-    Route::patch('/customer/{id}', 'CustomerController@apiUpdate')->name('customer.apiUpdate');
+    Route::patch('customer/{id}', 'CustomerController@apiUpdate')->name('customer.apiUpdate');
     Route::delete('customer/{id}', 'CustomerController@apiDestroy')->name('customer.apiDestroy');
 });

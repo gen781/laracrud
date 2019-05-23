@@ -14,13 +14,15 @@
         <Label class="cv-lbl" />
         <Label class="inner-circle" />
       </AbsoluteLayout>
-      <GridLayout rows="auto,*">
-        <ScrollView row="1">
-          <RadDataForm v-if="tampilData==true" ref="dataForm" :source="customerMap" :metadata="md" :groups="groups">
+      <ScrollView>
+        <GridLayout v-if="tampilData==true" rows="auto,*">
+          <RadDataForm row="0" ref="dataForm" :source="customerMap" :metadata="md" :groups="groups">
           </RadDataForm>
-        </ScrollView>
-        <Button row="2" text="Simpan" @tap="simpanCustomer" />
-      </GridLayout>
+          <StackLayout row="1">
+            <Button row="2" text="Simpan" @tap="simpanCustomer" />
+          </StackLayout>
+        </GridLayout>
+      </ScrollView>
     </StackLayout>
   </Page>
 </template>
@@ -114,53 +116,62 @@ export default {
   },
   methods: {
     hapusCustomer() {
-      this.tampilCircle = true;
-      this.tampilData = false;
-      axios.delete('https://145.14.144.71/api/customer/'+this.customerData.id).then(response => {
-        this.tampilCircle = false;
-        dialogs.confirm({
-          title: "Info",
-          message: "Data "+this.customerData.nama_customer+" berhasil dihapus!",
-          okButtonText: "OK"
-        }).then((result) => {
-          console.log(response);
-          this.$goto('home', this.navOptions);
-        });
-      }).catch(err => {
-        dialogs.confirm({
-          title: "Error",
-          message: error,
-          okButtonText: "OK"
-        }).then((result) => {
-          console.log(error);
-        });
-      })
+      dialogs.confirm({
+      title: "Peringatan",
+      message: "Yakin akan menghapus data "+this.customerData.nama_customer+"?",
+      okButtonText: "Ya",
+      cancelButtonText: "Batal",
+      }).then(result => {
+        if(result) {
+          this.tampilCircle = true;
+          this.tampilData = false;
+          axios.delete('https://145.14.144.71/api/customer/'+this.customerData.id).then(response => {
+            this.tampilCircle = false;
+            dialogs.confirm({
+              title: "Info",
+              message: "Data "+this.customerData.nama_customer+" berhasil dihapus!",
+              okButtonText: "OK"
+            }).then((result) => {
+              console.log(response);
+              this.$goto('home', this.navOptions);
+            });
+          }).catch(err => {
+            dialogs.confirm({
+              title: "Error",
+              message: error,
+              okButtonText: "OK"
+            }).then((result) => {
+              console.log(error);
+            });
+          })
 
-      // https.request({
-      //   url: 'https://145.14.144.71/api/customer/'+this.customerData.id,
-      //   method: "DELETE",
-      //   headers: { 
-      //     "Access-Control-Allow-Origin": "*",
-      //     "Content-Type": "application/json" 
-      //   }
-      // }).then((response) => {
-      //   dialogs.confirm({
-      //     title: "Info",
-      //     message: "Data "+this.customerData.nama_customer+" berhasil dihapus!",
-      //     okButtonText: "OK"
-      //   }).then((result) => {
-      //     console.log(response.content.toJSON());
-      //     this.$goto('home', this.navOptions);
-      //   });
-      // }, (error) => {
-      //   dialogs.confirm({
-      //     title: "Error",
-      //     message: error,
-      //     okButtonText: "OK"
-      //   }).then((result) => {
-      //     console.log(error);
-      //   });
-      // });
+          // https.request({
+          //   url: 'https://145.14.144.71/api/customer/'+this.customerData.id,
+          //   method: "DELETE",
+          //   headers: { 
+          //     "Access-Control-Allow-Origin": "*",
+          //     "Content-Type": "application/json" 
+          //   }
+          // }).then((response) => {
+          //   dialogs.confirm({
+          //     title: "Info",
+          //     message: "Data "+this.customerData.nama_customer+" berhasil dihapus!",
+          //     okButtonText: "OK"
+          //   }).then((result) => {
+          //     console.log(response.content.toJSON());
+          //     this.$goto('home', this.navOptions);
+          //   });
+          // }, (error) => {
+          //   dialogs.confirm({
+          //     title: "Error",
+          //     message: error,
+          //     okButtonText: "OK"
+          //   }).then((result) => {
+          //     console.log(error);
+          //   });
+          // });
+        }
+      });
     }
   },
 
