@@ -80,6 +80,27 @@ class CustomerController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->validate(
+            [
+                'nama_customer' => 'required',
+                'alamat' => 'required|min:10',
+                'tgl_masuk' => 'required',
+                'limit' => 'required',
+                'no_ktp' => 'required',
+                'operator' => 'required',
+                'no_rek' => 'required'
+            ], 
+            [
+                'nama_customer.required' => 'Nama harus diisi',
+                'alamat.required' => 'Alamat harus diisi',
+                'tgl_masuk.required' => 'Tanggal harus diisi',
+                'limit.required' => 'Limit harus diisi',
+                'no_ktp.required' => 'Nomor KTP harus diisi',
+                'operator.required' => 'Operator harus diisi',
+                'no_rek.required' => 'Nomor rekening harus diisi',
+            ]
+        );
+        
         $nama_customer = $request->input('nama_customer');
         $alamat = $request->input('alamat');
         $tgl_masuk = $request->input('tgl_masuk');

@@ -30,9 +30,9 @@
                                     <label>Nama</label>
                                     <input type="text" value="{{ $customer->nama_customer }}" name="nama_customer" class="form-control" placeholder="Nama customer ..">
 
-                                    @if($errors->has('nama_custumer'))
+                                    @if($errors->has('nama_customer'))
                                         <div class="text-danger">
-                                            {{ $errors->first('nama_customer')}}§
+                                            {{ $errors->first('nama_customer')}}
                                         </div>
                                     @endif
 
