@@ -44,12 +44,25 @@
                                 <td>{{ $customer->operator }}</td>
                                 <td>{{ $customer->no_rek }}</td>
                                 <td>
-                                    <a href="/edit/{{ $customer->id }}" class="btn btn-warning btn-xs">
-                                        <i class="fa fa-edit"></i>
-                                    </a>
-                                    <a href="/hapus/{{ $customer->id }}" class="btn btn-danger btn-xs">
+                                    <div class="btn-group" role="group">
+                                        <div class="col-md-6 custom">
+                                            <a href="/edit/{{ $customer->id }}" class="btn btn-warning btn-xs">
+                                            <i class="fa fa-edit"></i>
+                                            </a>        
+                                        </div>
+                                        <div class="col-md-6 custom">
+                                            <form action="{{route('customer.hapus', $customer->id)}}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-danger btn-xs" type="submit">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>                                    
+                                    <!-- <a href="/hapus/{{ $customer->id }}" class="btn btn-danger btn-xs">
                                         <i class="fa fa-trash"></i>
-                                    </a>
+                                    </a> -->
                                 </td>
                             </tr>
                             @endforeach

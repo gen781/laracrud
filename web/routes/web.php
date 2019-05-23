@@ -17,5 +17,7 @@
 
 Route::get('/', 'CustomerController@index');
 Route::get('/tambah', 'CustomerController@tambah');
-Route::get('/hapus/{id}', 'CustomerController@delete');
+Route::get('/edit/{id}', 'CustomerController@show')->name('customer.show');
+Route::patch('/update/{id}', 'CustomerController@update')->name('customer.update');
+Route::delete('/hapus/{id}', 'CustomerController@delete')->name('customer.hapus');
 Route::post('/store', 'CustomerController@store');

@@ -21,6 +21,28 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
+
+        $request->validate(
+            [
+                'nama_customer' => 'required',
+                'alamat' => 'required|min:10',
+                'tgl_masuk' => 'required',
+                'limit' => 'required',
+                'no_ktp' => 'required',
+                'operator' => 'required',
+                'no_rek' => 'required'
+            ], 
+            [
+                'nama_customer.required' => 'Nama harus diisi',
+                'alamat.required' => 'Alamat harus diisi',
+                'tgl_masuk.required' => 'Tanggal harus diisi',
+                'limit.required' => 'Limit harus diisi',
+                'no_ktp.required' => 'Nomor KTP harus diisi',
+                'operator.required' => 'Operator harus diisi',
+                'no_rek.required' => 'Nomor rekening harus diisi',
+            ]
+        );
+
         $nama_customer = $request->input('nama_customer');
         $alamat = $request->input('alamat');
         $tgl_masuk = $request->input('tgl_masuk');
@@ -47,6 +69,36 @@ class CustomerController extends Controller
     {
         $customer = Customer::find($id);
         $customer->delete();
+        return redirect('/');
+    }
+
+    public function show($id)
+    {
+        $customer = Customer::find($id);
+        return view('customer_edit', ['customer' => $customer]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $nama_customer = $request->input('nama_customer');
+        $alamat = $request->input('alamat');
+        $tgl_masuk = $request->input('tgl_masuk');
+        $limit = $request->input('limit');
+        $no_ktp = $request->input('no_ktp');
+        $operator = $request->input('operator');
+        $no_rek = $request->input('no_rek');
+
+        $customer = Customer::findOrFail($id);
+
+        $customer->nama_customer = $nama_customer;
+        $customer->alamat = $alamat;
+        $customer->tgl_masuk = $tgl_masuk;
+        $customer->limit = $limit;
+        $customer->no_ktp = $no_ktp;
+        $customer->operator = $operator;
+        $customer->no_rek = $no_rek;
+
+        $customer->update();
         return redirect('/');
     }
 

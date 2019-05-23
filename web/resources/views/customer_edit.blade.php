@@ -5,13 +5,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" crossorigin="anonymous">
-        <title>CRUD Data Customer | Tambah</title>
+        <title>CRUD Data Customer | Edit</title>
     </head>
     <body>
         <div class="container">
             <div class="card mt-5">
                 <div class="card-header text-center">
-                    CRUD Data Customer - Tambah
+                    CRUD Data Customer - Edit
                 </div>
                 <div class="card-body">
                     <a href="/" class="btn btn-primary">
@@ -21,19 +21,18 @@
                     <br/>
                     <br/>
                     
-                    <form method="post" action="/store">
-
+                    <form method="post" action="{{ route('customer.update', $customer->id) }}">
                         {{ csrf_field() }}
-                        
+                        @method('PATCH')
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Nama</label>
-                                    <input type="text" name="nama_customer" class="form-control" placeholder="Nama customer ..">
+                                    <input type="text" value="{{ $customer->nama_customer }}" name="nama_customer" class="form-control" placeholder="Nama customer ..">
 
-                                    @if($errors->has('nama_customer'))
+                                    @if($errors->has('nama_custumer'))
                                         <div class="text-danger">
-                                            {{ $errors->first('nama_customer')}}
+                                            {{ $errors->first('nama_customer')}}§
                                         </div>
                                     @endif
 
@@ -42,7 +41,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>No. Rekening</label>
-                                    <input name="no_rek" Type="number" class="form-control" placeholder="Nomor Rekening ..">
+                                    <input name="no_rek" value="{{ $customer->no_rek }}" Type="number" class="form-control" placeholder="Nomor Rekening ..">
                                     
                                     @if($errors->has('no_rek'))
                                         <div class="text-danger">
@@ -57,7 +56,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Tgl. Masuk</label>
-                                    <input name="tgl_masuk" value="{{ \Carbon\Carbon::today()->format('Y-m-d') }}" Type="date" class="form-control" placeholder="Tanggal masuk ..">
+                                    <input name="tgl_masuk" value="{{ \Carbon\Carbon::parse($customer->tgl_masuk)->format('Y-m-d') }}" Type="date" class="form-control" placeholder="Tanggal masuk ..">
                                     
                                     @if($errors->has('tgl_masuk'))
                                         <div class="text-danger">
@@ -70,7 +69,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Limit</label>
-                                    <input name="limit" Type="number" class="form-control" placeholder="Limit customer ..">
+                                    <input name="limit" value="{{ $customer->limit }}"Type="number" class="form-control" placeholder="Limit customer ..">
                                     
                                     @if($errors->has('limit'))
                                         <div class="text-danger">
@@ -86,7 +85,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>No. KTP</label>
-                                    <input name="no_ktp" Type="number" class="form-control" placeholder="Nomor KTP ..">
+                                    <input name="no_ktp" value="{{ $customer->no_ktp }}" Type="number" class="form-control" placeholder="Nomor KTP ..">
                                     
                                     @if($errors->has('no_ktp'))
                                         <div class="text-danger">
@@ -99,7 +98,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Operator</label>
-                                    <input name="operator" Type="number" class="form-control" placeholder="Operator ..">
+                                    <input name="operator" value="{{ $customer->operator }}" Type="number" class="form-control" placeholder="Operator ..">
                                     
                                     @if($errors->has('operator'))
                                         <div class="text-danger">
@@ -114,7 +113,13 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Alamat</label>
-                                    <textarea name="alamat" class="form-control" placeholder="Alamat customer .."></textarea>
+                                    <textarea
+                                        rows="3"
+                                        name="alamat" 
+                                        class="form-control" 
+                                        placeholder="Alamat customer .."
+                                    >{{ $customer->alamat }}
+                                    </textarea>
 
                                     @if($errors->has('alamat'))
                                         <div class="text-danger">
