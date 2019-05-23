@@ -16,10 +16,17 @@
       </AbsoluteLayout>
       <ScrollView>
         <GridLayout v-if="tampilData==true" rows="auto,*">
-          <RadDataForm row="0" ref="dataForm" :source="customerMap" :metadata="md" :groups="groups">
+          <RadDataForm 
+            row="0" 
+            ref="dataForm" 
+            :source="customerMap" 
+            :metadata="md" 
+            :groups="groups"
+             @propertyCommitted="onPropertyCommitted"
+          >
           </RadDataForm>
           <StackLayout row="1">
-            <Button row="2" text="Simpan" @tap="simpanCustomer" />
+            <Button row="2" text="Simpan" @tap="updateCustomer" />
           </StackLayout>
         </GridLayout>
       </ScrollView>
@@ -35,10 +42,12 @@ export default {
   props: {
     customerData: '',
     tampilCircle: '',
-    tampilData: ''
+    tampilData: '',
+    customer_map: ''
   },
   data() {
     return {
+      customerCommitted: {},
       md: {
         "isReadOnly": false,
         "commitMode": "Immediate",
@@ -103,6 +112,10 @@ export default {
         }
       }
     },
+    onPropertyCommitted (data) {
+      this.customerCommitted = data.object.editedObject;
+      console.log(this.customerCommitted);
+    },
     customerMap() {
       let newCustomer = Object.assign({}, this.customerData);
       delete newCustomer.id;
@@ -112,9 +125,59 @@ export default {
     }
   },
   mounted(){
-
+    this.customer_map = thi.customerData;
   },
   methods: {
+    updateCustomer() {
+      if(Object.keys(this.customerCommitted).length === 0) {
+        dialogs.alert({
+          title: "Perhatian",
+          message: "Sebagian data masih kosong, silahkan lengkapi data!",
+          okButtonText: "OK"
+        })
+      } else {
+        let cstParse = JSON.parse(this.customerCommitted);
+        console.log(cstParse)
+        if(cstParse.nama_customer==''||cstParse.alamat==''||cstParse.tgl_masuk==''
+        ||cstParse.limit==''||cstParse.no_ktp==''||cstParse.operator==''||cstParse.no_rek=='') {
+          dialogs.alert({
+            title: "Perhatian",
+            message: "Sebagian data masih kosong, silahkan lengkapi data!",
+            okButtonText: "OK"
+          })
+        } else {
+          this.tampilCircle = true;
+          this.tampilData = false;
+          http.request({
+            url: "https://laracrudbasic.000webhostapp.com/api/customer/"+this.customerData.id,
+            method: "PATCH",
+            headers: { 
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": "application/json" 
+            },
+            content: this.customerCommitted
+          }).then((response) => {
+            this.tampilCircle = false;
+            dialogs.confirm({
+              title: "Info",
+              message: "Data "+cstParse.nama_customer+" berhasil diupdate!",
+              okButtonText: "OK"
+            }).then((result) => {
+              console.log(response.content.toJSON());
+              this.$goto('home', this.navOptions);
+            });
+          }, (error) => {
+            dialogs.confirm({
+              title: "Error",
+              message: error,
+              okButtonText: "OK"
+            }).then((result) => {
+              console.log(error);
+            });
+          });
+        }
+      }
+    },
     hapusCustomer() {
       dialogs.confirm({
       title: "Peringatan",
