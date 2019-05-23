@@ -19,6 +19,30 @@ class CustomerController extends Controller
     	return view('customer_tambah');
     }
 
+    public function store(Request $request)
+    {
+        $nama_customer = $request->input('nama_customer');
+        $alamat = $request->input('alamat');
+        $tgl_masuk = $request->input('tgl_masuk');
+        $limit = $request->input('limit');
+        $no_ktp = $request->input('no_ktp');
+        $operator = $request->input('operator');
+        $no_rek = $request->input('no_rek');
+  
+        $customer = new Customer([
+            'nama_customer' => $nama_customer,
+            'alamat' => $alamat,
+            'tgl_masuk' => $tgl_masuk,
+            'limit' => $limit,
+            'no_ktp' => $no_ktp,
+            'operator' => $operator,
+            'no_rek' => $no_rek
+        ]);   
+
+        $customer->save();
+    	return redirect('/');
+    }
+
     public function delete($id)
     {
         $customer = Customer::find($id);

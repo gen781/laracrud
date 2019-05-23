@@ -18,3 +18,4 @@
 Route::get('/', 'CustomerController@index');
 Route::get('/tambah', 'CustomerController@tambah');
 Route::get('/hapus/{id}', 'CustomerController@delete');
+Route::post('/store', 'CustomerController@store');
