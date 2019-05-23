@@ -73,7 +73,7 @@ export default {
                 "name": "no_ktp",
                 "displayName": "No. KTP",
                 "index": 4,
-                "Editor": "Number",
+                "Editor": "Text",
             },
             {
                 "name": "operator",
@@ -85,7 +85,7 @@ export default {
                 "name": "no_rek",
                 "displayName": "No. Rekening",
                 "index": 6,
-                "Editor": "Number"
+                "Editor": "Text"
             },
         ]
       }
