@@ -35,15 +35,14 @@
 </template>
 
 <script>
-import * as https from "https";
+import * as http from "http";
 import axios from 'axios';
 var dialogs = require("tns-core-modules/ui/dialogs");
 export default {
   props: {
     customerData: '',
     tampilCircle: '',
-    tampilData: '',
-    customer_map: ''
+    tampilData: ''
   },
   data() {
     return {
@@ -112,10 +111,6 @@ export default {
         }
       }
     },
-    onPropertyCommitted (data) {
-      this.customerCommitted = data.object.editedObject;
-      console.log(this.customerCommitted);
-    },
     customerMap() {
       let newCustomer = Object.assign({}, this.customerData);
       delete newCustomer.id;
@@ -125,57 +120,60 @@ export default {
     }
   },
   mounted(){
-    this.customer_map = thi.customerData;
   },
   methods: {
+    onPropertyCommitted(data) {
+      this.customerCommitted = data.object.editedObject;
+      console.log(this.customerCommitted);
+    },
     updateCustomer() {
+      var cstParse = {};
+      var cstString = ''
       if(Object.keys(this.customerCommitted).length === 0) {
+        cstParse = Object.assign({}, this.customerMap);
+        cstString = JSON.stringify(this.customerMap);
+      } else {
+        cstParse = Object.assign({}, JSON.parse(this.customerCommitted));
+        cstString = this.customerCommitted;
+      }
+      console.log(cstParse)
+      if(cstParse.nama_customer==''||cstParse.alamat==''||cstParse.tgl_masuk==''
+      ||cstParse.limit==''||cstParse.no_ktp==''||cstParse.operator==''||cstParse.no_rek=='') {
         dialogs.alert({
           title: "Perhatian",
           message: "Sebagian data masih kosong, silahkan lengkapi data!",
           okButtonText: "OK"
         })
       } else {
-        let cstParse = JSON.parse(this.customerCommitted);
-        console.log(cstParse)
-        if(cstParse.nama_customer==''||cstParse.alamat==''||cstParse.tgl_masuk==''
-        ||cstParse.limit==''||cstParse.no_ktp==''||cstParse.operator==''||cstParse.no_rek=='') {
-          dialogs.alert({
-            title: "Perhatian",
-            message: "Sebagian data masih kosong, silahkan lengkapi data!",
+        this.tampilCircle = true;
+        this.tampilData = false;
+        http.request({
+          url: "https://laracrudbasic.000webhostapp.com/api/customer/"+this.customerData.id,
+          method: "PATCH",
+          headers: { 
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json" 
+          },
+          content: cstString
+        }).then((response) => {
+          this.tampilCircle = false;
+          dialogs.confirm({
+            title: "Info",
+            message: "Data "+cstParse.nama_customer+" berhasil diupdate!",
             okButtonText: "OK"
-          })
-        } else {
-          this.tampilCircle = true;
-          this.tampilData = false;
-          http.request({
-            url: "https://laracrudbasic.000webhostapp.com/api/customer/"+this.customerData.id,
-            method: "PATCH",
-            headers: { 
-              "Access-Control-Allow-Origin": "*",
-              "Content-Type": "application/json" 
-            },
-            content: this.customerCommitted
-          }).then((response) => {
-            this.tampilCircle = false;
-            dialogs.confirm({
-              title: "Info",
-              message: "Data "+cstParse.nama_customer+" berhasil diupdate!",
-              okButtonText: "OK"
-            }).then((result) => {
-              console.log(response.content.toJSON());
-              this.$goto('home', this.navOptions);
-            });
-          }, (error) => {
-            dialogs.confirm({
-              title: "Error",
-              message: error,
-              okButtonText: "OK"
-            }).then((result) => {
-              console.log(error);
-            });
+          }).then((result) => {
+            console.log(response.content.toJSON());
+            this.$goto('home', this.navOptions);
           });
-        }
+        }, (error) => {
+          dialogs.confirm({
+            title: "Error",
+            message: error,
+            okButtonText: "OK"
+          }).then((result) => {
+            console.log(error);
+          });
+        });
       }
     },
     hapusCustomer() {
